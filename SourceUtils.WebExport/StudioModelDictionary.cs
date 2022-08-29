@@ -24,7 +24,13 @@ namespace SourceUtils.WebExport
                 {
                     var mdl = StudioModelFile.FromProvider( x, bsp.PakFile, Program.Resources );
                     File.AppendAllText("models.txt", "StudioModelDictionary.cs OnFindResourcePaths: " + x + Environment.NewLine);
-                    if ( mdl == null ) return null;
+                    if ( mdl == null )
+                    {
+                        File.AppendAllText("models.txt", "mdl is null!" + Environment.NewLine);
+                        return null;
+                    }
+                    else
+                        File.AppendAllText("models.txt", $"vertexcount {mdl.TotalVertices} FirstMaterialIndex {MaterialDictionary.GetResourceIndex( bsp, mdl.GetMaterialName( 0, bsp.PakFile, Program.Resources )}" + Environment.NewLine);
                     return new
                     {
                         Path = x,
