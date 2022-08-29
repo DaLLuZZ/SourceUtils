@@ -354,6 +354,8 @@ namespace SourceUtils
                 throw new Exception( "Not a MDL file." );
             }
 
+            File.AppendAllText("models.txt", "bones {FileHeader.NumBones} textures {FileHeader.NumTextures}" + Environment.NewLine);
+
             _bones = new StudioBone[FileHeader.NumBones];
             _boneNames = new string[FileHeader.NumBones];
             _materials = new StudioTexture[FileHeader.NumTextures];
