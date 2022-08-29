@@ -12,7 +12,7 @@ namespace SourceUtils
     {
         public static StudioModelFile FromProvider(string path, params IResourceProvider[] providers)
         {
-            File.AppendAllText("models.txt", path + Environment.NewLine);
+            File.AppendAllText("models.txt", "tudioModelFile FromProvider: " + path + Environment.NewLine);
             var provider = providers.FirstOrDefault(x => x.ContainsFile(path));
             if (provider == null)
             {
@@ -354,7 +354,7 @@ namespace SourceUtils
                 throw new Exception( "Not a MDL file." );
             }
 
-            File.AppendAllText("models.txt", "bones {FileHeader.NumBones} textures {FileHeader.NumTextures}" + Environment.NewLine);
+            File.AppendAllText("models.txt", $"bones {FileHeader.NumBones} textures {FileHeader.NumTextures}" + Environment.NewLine);
 
             _bones = new StudioBone[FileHeader.NumBones];
             _boneNames = new string[FileHeader.NumBones];
