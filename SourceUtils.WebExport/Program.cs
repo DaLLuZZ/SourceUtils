@@ -329,6 +329,7 @@ namespace SourceUtils.WebExport
             SetBaseOptions( args );
 
             var mdl = StudioModelFile.FromProvider( args.InputPath, Resources );
+            File.AppendAllText("models.txt", "Program.cs ModelPatch: " + args.InputPath + Environment.NewLine);
 
             if ( mdl == null )
             {
