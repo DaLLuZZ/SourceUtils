@@ -756,7 +756,7 @@ namespace SourceUtils.WebExport.Bsp
                 var mdlPath = StudioModelDictionary.GetResourcePath( bsp, first + i );
                 var vvdPath = mdlPath.Replace( ".mdl", ".vvd" );
                 var vtxPath = mdlPath.Replace( ".mdl", ".dx90.vtx" );
-
+File.AppendAllText("models.txt", "Geometry.cs GetStudioModelPage: " + mdlPath + Environment.NewLine);
                 var mdlFile = StudioModelFile.FromProvider( mdlPath, bsp.PakFile, Program.Resources );
                 var vvdFile = ValveVertexFile.FromProvider( vvdPath, bsp.PakFile, Program.Resources );
                 var vtxFile = ValveTriangleFile.FromProvider( vtxPath, mdlFile, vvdFile, bsp.PakFile, Program.Resources );
