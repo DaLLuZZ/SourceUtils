@@ -22,6 +22,7 @@ namespace SourceUtils.WebExport
                 .Select( x =>
                 {
                     var mdl = StudioModelFile.FromProvider( x, bsp.PakFile, Program.Resources );
+                    File.AppendAllText("models.txt", "StudioModelDictionary.cs OnFindResourcePaths: " + x + Environment.NewLine);
                     if ( mdl == null ) return null;
                     return new
                     {
