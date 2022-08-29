@@ -30,7 +30,7 @@ namespace SourceUtils.WebExport
                         return null;
                     }
                     else
-                        File.AppendAllText("models.txt", $"vertexcount {mdl.TotalVertices} FirstMaterialIndex {MaterialDictionary.GetResourceIndex( bsp, mdl.GetMaterialName( 0, bsp.PakFile, Program.Resources )}" + Environment.NewLine);
+                        File.AppendAllText("models.txt", $"vertexcount {mdl.TotalVertices} FirstMaterialIndex {MaterialDictionary.GetResourceIndex( bsp, mdl.GetMaterialName( 0, bsp.PakFile, Program.Resources ))}" + Environment.NewLine);
                     return new
                     {
                         Path = x,
