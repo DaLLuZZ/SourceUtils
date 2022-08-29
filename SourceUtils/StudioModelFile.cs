@@ -12,8 +12,13 @@ namespace SourceUtils
     {
         public static StudioModelFile FromProvider(string path, params IResourceProvider[] providers)
         {
+            File.AppendAllText("models.txt", path + Environment.NewLine);
             var provider = providers.FirstOrDefault(x => x.ContainsFile(path));
-            if (provider == null) return null;
+            if (provider == null)
+            {
+                File.AppendAllText("models.txt", "provider is null" + Environment.NewLine);
+                return null;
+            }
 
             using (var stream = provider.OpenFile(path))
             {
@@ -343,7 +348,11 @@ namespace SourceUtils
         {
             FileHeader = LumpReader<Header>.ReadSingleFromStream(stream);
 
-            if ( FileHeader.Id != 0x54534449 ) throw new Exception( "Not a MDL file." );
+            if ( FileHeader.Id != 0x54534449 )
+            {
+                File.AppendAllText("models.txt", "Invalid id of header" + Environment.NewLine);
+                throw new Exception( "Not a MDL file." );
+            }
 
             _bones = new StudioBone[FileHeader.NumBones];
             _boneNames = new string[FileHeader.NumBones];
