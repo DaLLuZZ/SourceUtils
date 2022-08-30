@@ -61,7 +61,7 @@ namespace SourceUtils {
             const rgb = StudioModel.sampleAmbientCube_temp.set(0, 0, 0);
             const samples = StudioModel.sampleAmbientCube_samples;
 
-            leaf.getAmbientCube(pos, samples);
+            leaf.getAmbientCube(pos, samples, (success) => console.log("sampleAmbientCube -> getAmbientCube: success = ", success);
 
             let sample: Facepunch.IVector3;
             let mul: number;
