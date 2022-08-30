@@ -43,7 +43,7 @@ namespace SourceUtils.WebExport.Bsp
             for ( var i = 0; i < count; ++i )
             {
                 var path = MaterialDictionary.GetResourcePath( bsp, first + i );
-                File.AppendAllText("materials.txt", $"path: {path}" + Environment.NewLine);
+                File.AppendAllText("materials.txt", $"[{i}/{count}] path: {path}" + Environment.NewLine);
                 var mat = Material.Get(bsp, path);
                 page.Materials.Add(mat);
 
