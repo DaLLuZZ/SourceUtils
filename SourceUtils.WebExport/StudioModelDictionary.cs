@@ -46,11 +46,10 @@ namespace SourceUtils.WebExport
 
             foreach ( var item in items )
             {
-                File.AppendAllText("models.txt", $"item.Path: {item.Path}" + Environment.NewLine);
+                File.AppendAllText("models.txt", $"[{GetResourceIndex( item.Path )}] [{_vertexCounts.Count}] item.Path: {item.Path}" + Environment.NewLine);
                 yield return item.Path;
 
                 var index = GetResourceIndex( item.Path );
-                File.AppendAllText("models.txt", $"index: {index}\n" + Environment.NewLine);
                 if ( index == _vertexCounts.Count )
                 {
                     _vertexCounts.Add( item.VertexCount );
