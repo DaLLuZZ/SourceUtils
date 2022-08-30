@@ -797,7 +797,9 @@ File.AppendAllText("models.txt", $"[{j}] BodyPartName: {mdlFile.GetBodyPartName(
 
                             var meshData = GetOrCreateMeshData( bsp, page,
                                 mdlFile.GetMaterialName( mesh.Material, bsp.PakFile, Program.Resources ), false );
+
 File.AppendAllText("models.txt", $"[{j}] MaterialName: {mdlFile.GetMaterialName( mesh.Material, bsp.PakFile, Program.Resources )}" + Environment.NewLine);
+
                             var meshElem = new MeshElement
                             {
                                 Mode = PrimitiveType.Triangles,
@@ -805,12 +807,16 @@ File.AppendAllText("models.txt", $"[{j}] MaterialName: {mdlFile.GetMaterialName(
                                 VertexOffset = meshData.Vertices.Count
                             };
 
+File.AppendAllText("models.txt", $"[{j}] meshElem: Mode = {PrimitiveType.Triangles}; IndexOffset = {meshData.Indices.Count}; VertexOffset = {meshData.Vertices.Count}" + Environment.NewLine);
+
                             var smdMesh = new SmdMesh
                             {
                                 MeshId = mesh.MeshId,
                                 Material = meshData.MaterialIndex,
                                 Element = meshData.Elements.Count
                             };
+
+File.AppendAllText("models.txt", $"[{j}] smdMesh: MeshId = {mesh.MeshId}; Material = {meshData.MaterialIndex}; Element = {meshData.Elements.Count}" + Environment.NewLine);
 
                             meshData.BeginPrimitive();
 
@@ -828,6 +834,8 @@ File.AppendAllText("models.txt", $"[{j}] MaterialName: {mdlFile.GetMaterialName(
 
                             meshElem.IndexCount = meshData.Indices.Count - meshElem.IndexOffset;
                             meshElem.VertexCount = meshData.Vertices.Count - meshElem.VertexOffset;
+
+File.AppendAllText("models.txt", $"[{j}] meshElem: IndexCount = {meshElem.IndexCount}; VertexCount = {meshElem.VertexCount}" + Environment.NewLine);
 
                             meshData.Elements.Add( meshElem );
 
