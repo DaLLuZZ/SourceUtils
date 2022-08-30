@@ -473,6 +473,7 @@ namespace SourceUtils.WebExport.Bsp
 
             if ( !page.MaterialIndices.TryGetValue( matDictIndex, out int matIndex ) )
             {
+                File.AppendAllText("models.txt", $"GetOrCreateMeshData: create matDistIndex {matDictIndex} matIndex {matIndex} path {matPath}" + Environment.NewLine);
                 var vmt = ValveMaterialFile.FromProvider( MaterialDictionary.GetResourcePath( bsp, matDictIndex ), bsp.PakFile, Program.Resources );
 
                 matGroup = new MaterialGroup( matIndex = page.Materials.Count, cacheVertices ) { Material = matDictIndex };
@@ -483,6 +484,7 @@ namespace SourceUtils.WebExport.Bsp
             }
             else
             {
+                File.AppendAllText("models.txt", $"GetOrCreateMeshData: get matDistIndex {matDictIndex} matIndex {matIndex} path {matPath}" + Environment.NewLine);
                 matGroup = page.Materials[matIndex];
             }
 
@@ -835,7 +837,7 @@ File.AppendAllText("models.txt", $"[{j}] smdMesh: MeshId = {mesh.MeshId}; Materi
                             meshElem.IndexCount = meshData.Indices.Count - meshElem.IndexOffset;
                             meshElem.VertexCount = meshData.Vertices.Count - meshElem.VertexOffset;
 
-File.AppendAllText("models.txt", $"[{j}] meshElem: IndexCount = {meshElem.IndexCount}; VertexCount = {meshElem.VertexCount}" + Environment.NewLine);
+File.AppendAllText("models.txt", $"[{j}] meshElem: IndexCount = {meshElem.IndexCount}; VertexCount = {meshElem.VertexCount}\n" + Environment.NewLine);
 
                             meshData.Elements.Add( meshElem );
 
