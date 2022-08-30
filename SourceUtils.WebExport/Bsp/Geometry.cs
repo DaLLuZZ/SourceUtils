@@ -746,7 +746,7 @@ namespace SourceUtils.WebExport.Bsp
 
             var first = info?.First ?? StudioModelDictionary.GetResourceCount( bsp );
             var count = info?.Count ?? 0;
-
+File.AppendAllText("models.txt", $"Geometry.cs GetStudioModelPage: count = {count}" + Environment.NewLine);
             var page = new StudioModelPage();
 
             StudioVertex[] vertices = null;
@@ -761,7 +761,7 @@ File.AppendAllText("models.txt", "Geometry.cs GetStudioModelPage: " + mdlPath + 
                 var mdlFile = StudioModelFile.FromProvider( mdlPath, bsp.PakFile, Program.Resources );
                 var vvdFile = ValveVertexFile.FromProvider( vvdPath, bsp.PakFile, Program.Resources );
                 var vtxFile = ValveTriangleFile.FromProvider( vtxPath, mdlFile, vvdFile, bsp.PakFile, Program.Resources );
-
+File.AppendAllText("models.txt", $"mdlFile.BodyPartCount = {mdlFile.BodyPartCount}" + Environment.NewLine);
                 StudioModel mdl;
                 page.Models.Add( mdl = new StudioModel() );
 
@@ -772,6 +772,7 @@ File.AppendAllText("models.txt", "Geometry.cs GetStudioModelPage: " + mdlPath + 
                     {
                         Name = mdlFile.GetBodyPartName( j )
                     } );
+                    File.AppendAllText("models.txt", $"[{j}] BodyPartName: {mdlFile.GetBodyPartName( j )}" + Environment.NewLine);
 
                     smdBodyPart.Models.AddRange( mdlFile.GetModels( j ).Select( (model, modelIndex) =>
                     {
@@ -784,7 +785,7 @@ File.AppendAllText("models.txt", "Geometry.cs GetStudioModelPage: " + mdlPath + 
                             {
                                 vertices = new StudioVertex[MathHelper.NextPowerOfTwo( vertexCount )];
                             }
-
+File.AppendAllText("models.txt", $"[{j}] BodyPartName: {mdlFile.GetBodyPartName( j )}" + Environment.NewLine);
                             var indexCount = vtxFile.GetIndexCount( j, modelIndex, 0, meshIndex );
                             if ( indices == null || indices.Length < indexCount )
                             {
@@ -796,7 +797,7 @@ File.AppendAllText("models.txt", "Geometry.cs GetStudioModelPage: " + mdlPath + 
 
                             var meshData = GetOrCreateMeshData( bsp, page,
                                 mdlFile.GetMaterialName( mesh.Material, bsp.PakFile, Program.Resources ), false );
-
+File.AppendAllText("models.txt", $"[{j}] MaterialName: {mdlFile.GetMaterialName( mesh.Material, bsp.PakFile, Program.Resources )}" + Environment.NewLine);
                             var meshElem = new MeshElement
                             {
                                 Mode = PrimitiveType.Triangles,
