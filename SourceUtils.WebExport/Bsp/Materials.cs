@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Newtonsoft.Json;
 using SourceUtils.ValveBsp.Entities;
 using Ziks.WebServer;
@@ -37,9 +38,12 @@ namespace SourceUtils.WebExport.Bsp
 
             var page = new MaterialPage();
 
+            File.AppendAllText("materials.txt", $"Materials.cs GetPage: count {count} first {first}" + Environment.NewLine);
+
             for ( var i = 0; i < count; ++i )
             {
                 var path = MaterialDictionary.GetResourcePath( bsp, first + i );
+                File.AppendAllText("materials.txt", $"[{i}/{count}] path: {path}" + Environment.NewLine);
                 var mat = Material.Get(bsp, path);
                 page.Materials.Add(mat);
 
@@ -56,6 +60,8 @@ namespace SourceUtils.WebExport.Bsp
                     if ( prop.Type != MaterialPropertyType.TextureUrl ) continue;
 
                     prop.Type = MaterialPropertyType.TextureIndex;
+
+                    File.AppendAllText("materials.txt", $"texUrl: {prop.Value}" + Environment.NewLine);
 
                     var texUrl = (Url) prop.Value;
                     int texIndex;

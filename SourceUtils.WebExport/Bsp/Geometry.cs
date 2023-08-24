@@ -5,6 +5,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using OpenTK;
 using SourceUtils.ValveBsp;
+using System.IO;
 using Ziks.WebServer;
 using PrimitiveType = OpenTK.Graphics.ES20.PrimitiveType;
 
@@ -472,6 +473,7 @@ namespace SourceUtils.WebExport.Bsp
 
             if ( !page.MaterialIndices.TryGetValue( matDictIndex, out int matIndex ) )
             {
+                File.AppendAllText("models.txt", $"GetOrCreateMeshData: create matDistIndex {matDictIndex} matIndex {matIndex} path {matPath}" + Environment.NewLine);
                 var vmt = ValveMaterialFile.FromProvider( MaterialDictionary.GetResourcePath( bsp, matDictIndex ), bsp.PakFile, Program.Resources );
 
                 matGroup = new MaterialGroup( matIndex = page.Materials.Count, cacheVertices ) { Material = matDictIndex };
@@ -482,6 +484,7 @@ namespace SourceUtils.WebExport.Bsp
             }
             else
             {
+                File.AppendAllText("models.txt", $"GetOrCreateMeshData: get matDistIndex {matDictIndex} matIndex {matIndex} path {matPath}" + Environment.NewLine);
                 matGroup = page.Materials[matIndex];
             }
 
@@ -745,7 +748,7 @@ namespace SourceUtils.WebExport.Bsp
 
             var first = info?.First ?? StudioModelDictionary.GetResourceCount( bsp );
             var count = info?.Count ?? 0;
-
+File.AppendAllText("models.txt", $"Geometry.cs GetStudioModelPage: count = {count}" + Environment.NewLine);
             var page = new StudioModelPage();
 
             StudioVertex[] vertices = null;
@@ -756,11 +759,11 @@ namespace SourceUtils.WebExport.Bsp
                 var mdlPath = StudioModelDictionary.GetResourcePath( bsp, first + i );
                 var vvdPath = mdlPath.Replace( ".mdl", ".vvd" );
                 var vtxPath = mdlPath.Replace( ".mdl", ".dx90.vtx" );
-
+File.AppendAllText("models.txt", "Geometry.cs GetStudioModelPage: " + mdlPath + Environment.NewLine);
                 var mdlFile = StudioModelFile.FromProvider( mdlPath, bsp.PakFile, Program.Resources );
                 var vvdFile = ValveVertexFile.FromProvider( vvdPath, bsp.PakFile, Program.Resources );
                 var vtxFile = ValveTriangleFile.FromProvider( vtxPath, mdlFile, vvdFile, bsp.PakFile, Program.Resources );
-
+File.AppendAllText("models.txt", $"mdlFile.BodyPartCount = {mdlFile.BodyPartCount}" + Environment.NewLine);
                 StudioModel mdl;
                 page.Models.Add( mdl = new StudioModel() );
 
@@ -771,6 +774,7 @@ namespace SourceUtils.WebExport.Bsp
                     {
                         Name = mdlFile.GetBodyPartName( j )
                     } );
+                    File.AppendAllText("models.txt", $"[{j}] BodyPartName: {mdlFile.GetBodyPartName( j )}" + Environment.NewLine);
 
                     smdBodyPart.Models.AddRange( mdlFile.GetModels( j ).Select( (model, modelIndex) =>
                     {
@@ -783,7 +787,7 @@ namespace SourceUtils.WebExport.Bsp
                             {
                                 vertices = new StudioVertex[MathHelper.NextPowerOfTwo( vertexCount )];
                             }
-
+File.AppendAllText("models.txt", $"[{j}] BodyPartName: {mdlFile.GetBodyPartName( j )}" + Environment.NewLine);
                             var indexCount = vtxFile.GetIndexCount( j, modelIndex, 0, meshIndex );
                             if ( indices == null || indices.Length < indexCount )
                             {
@@ -796,6 +800,8 @@ namespace SourceUtils.WebExport.Bsp
                             var meshData = GetOrCreateMeshData( bsp, page,
                                 mdlFile.GetMaterialName( mesh.Material, bsp.PakFile, Program.Resources ), false );
 
+File.AppendAllText("models.txt", $"[{j}] MaterialName: {mdlFile.GetMaterialName( mesh.Material, bsp.PakFile, Program.Resources )}" + Environment.NewLine);
+
                             var meshElem = new MeshElement
                             {
                                 Mode = PrimitiveType.Triangles,
@@ -803,12 +809,16 @@ namespace SourceUtils.WebExport.Bsp
                                 VertexOffset = meshData.Vertices.Count
                             };
 
+File.AppendAllText("models.txt", $"[{j}] meshElem: Mode = {PrimitiveType.Triangles}; IndexOffset = {meshData.Indices.Count}; VertexOffset = {meshData.Vertices.Count}" + Environment.NewLine);
+
                             var smdMesh = new SmdMesh
                             {
                                 MeshId = mesh.MeshId,
                                 Material = meshData.MaterialIndex,
                                 Element = meshData.Elements.Count
                             };
+
+File.AppendAllText("models.txt", $"[{j}] smdMesh: MeshId = {mesh.MeshId}; Material = {meshData.MaterialIndex}; Element = {meshData.Elements.Count}" + Environment.NewLine);
 
                             meshData.BeginPrimitive();
 
@@ -826,6 +836,8 @@ namespace SourceUtils.WebExport.Bsp
 
                             meshElem.IndexCount = meshData.Indices.Count - meshElem.IndexOffset;
                             meshElem.VertexCount = meshData.Vertices.Count - meshElem.VertexOffset;
+
+File.AppendAllText("models.txt", $"[{j}] meshElem: IndexCount = {meshElem.IndexCount}; VertexCount = {meshElem.VertexCount}\n" + Environment.NewLine);
 
                             meshData.Elements.Add( meshElem );
 

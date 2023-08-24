@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace SourceUtils.WebExport
@@ -22,7 +23,14 @@ namespace SourceUtils.WebExport
                 .Select( x =>
                 {
                     var mdl = StudioModelFile.FromProvider( x, bsp.PakFile, Program.Resources );
-                    if ( mdl == null ) return null;
+                    File.AppendAllText("models.txt", "StudioModelDictionary.cs OnFindResourcePaths: " + x + Environment.NewLine);
+                    if ( mdl == null )
+                    {
+                        File.AppendAllText("models.txt", "mdl is null!" + Environment.NewLine);
+                        return null;
+                    }
+                    else
+                        File.AppendAllText("models.txt", $"vertexcount {mdl.TotalVertices} FirstMaterialIndex {MaterialDictionary.GetResourceIndex( bsp, mdl.GetMaterialName( 0, bsp.PakFile, Program.Resources ))}" + Environment.NewLine);
                     return new
                     {
                         Path = x,
@@ -38,6 +46,7 @@ namespace SourceUtils.WebExport
 
             foreach ( var item in items )
             {
+                File.AppendAllText("models.txt", $"[{GetResourceIndex( item.Path )}] [{_vertexCounts.Count}] item.Path: {item.Path}" + Environment.NewLine);
                 yield return item.Path;
 
                 var index = GetResourceIndex( item.Path );
